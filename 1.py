@@ -29,7 +29,7 @@ class Category:
         self.draw = draw
 
 #Functions
-def roundrobin(players):
+def roundrobin(players): #Generate match-up for each round, each pair play each other twice
     pairings = []
     for i in range(len(players) - 1):
         roundmatch = []
@@ -41,7 +41,7 @@ def roundrobin(players):
         pairings.append(roundmatch)
         players = [players[0]] + [players[-1]] + players[1:-1]
     return pairings
-def loadplayers(path):
+def loadplayers(path): #Get players from csv file
     df = pd.read_csv(path)
     players = []
     for _, row in df.iterrows():
@@ -63,12 +63,7 @@ def loadplayers(path):
         players.append(player)
     return players
 def matchupscore(player, variation):
-    return (player.skills.intu * variation.weights.intu +
-            player.skills.know * variation.weights.know +
-            player.skills.time * variation.weights.time +
-            player.skills.open * variation.weights.open +
-            player.skills.end * variation.weights.end +
-            player.skills.ment * variation.weights.ment)
+    return sum(s * w for s, w in zip(vars(player.skills).values(), vars(variation.weights).values()))
 def drawprob(player1, player2, variation):
     endf = variation.weights.end * ((player1.skills.end + player2.skills.end) / 200)
     mentf = variation.weights.ment * ((player1.skills.ment + player2.skills.ment) / 200)
