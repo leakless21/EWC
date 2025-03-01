@@ -14,7 +14,9 @@ class Records:
         self.win = win
         self.loss = loss
         self.draw = draw
-        self.points = win + draw * 0.5
+    @property
+    def points(self):
+        return self.win + self.draw * 0.5
 class Chesser:
     def __init__(self, name, org, id, records, skills):
         self.name = name
@@ -68,7 +70,7 @@ def drawprob(player1, player2, variation):
     endf = variation.weights.end * ((player1.skills.end + player2.skills.end) / 200)
     mentf = variation.weights.ment * ((player1.skills.ment + player2.skills.ment) / 200)
     timef = variation.weights.time * ((player1.skills.time + player2.skills.time) / 200)
-    return variation.draw + endf + mentf + timef
+    return max(0.05, min(0.6, variation.draw + endf + mentf + timef))
 def simulate(player1, player2, variation):
     score1 = matchupscore(player1, variation)
     score2 = matchupscore(player2, variation)
@@ -83,17 +85,13 @@ def simulate(player1, player2, variation):
 def updateresult(outcome, player1, player2):
     if outcome == player1:
         player1.records.win += 1
-        player1.records.points += 1
         player2.records.loss += 1
     elif outcome == player2:
         player2.records.win += 1
-        player2.records.points += 1
         player1.records.loss += 1
     elif "Draw" in outcome:
         player1.records.draw += 1
-        player1.records.points += 0.5
         player2.records.draw += 1
-        player2.records.points += 0.5
 def displayresult(players, category):
     players.sort(key=lambda p: (p.records.points, p.records.win), reverse=True)
     print(f"\n{category.name} results:")
@@ -116,13 +114,13 @@ def choosevariation():
         return Freestyle
     else:
         print("Invalid input")
-        return None  # Return None for invalid input
+        return None
 
 #Categories
-Classical = Category("Classical", Skills(0.15, 0.25, 0.1, 0.2, 0.2, 0.1), draw=0.2)
-Rapid = Category("Rapid", Skills(0.2, 0.2, 0.2, 0.15, 0.15, 0.1), draw=0.15)
-Blitz = Category("Blitz", Skills(0.3, 0.15, 0.25, 0.15, 0.05, 0.1), draw=0.1)
-Freestyle = Category("Freestyle", Skills(0.25, 0.25, 0.15, 0.1, 0.15, 0.1), draw=0.15)
+Classical = Category("Classical", weights=Skills(0.15, 0.25, 0.1, 0.2, 0.2, 0.1), draw=0.2)
+Rapid = Category("Rapid", weights=Skills(0.2, 0.2, 0.2, 0.15, 0.15, 0.1), draw=0.15)
+Blitz = Category("Blitz", weights=Skills(0.3, 0.15, 0.25, 0.15, 0.05, 0.1), draw=0.1)
+Freestyle = Category("Freestyle", weights=Skills(0.25, 0.25, 0.15, 0.1, 0.15, 0.1), draw=0.15)
 
 #Main loop
 players = loadplayers("Players.csv")
