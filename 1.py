@@ -14,7 +14,9 @@ class Records:
         self.win = win
         self.loss = loss
         self.draw = draw
-        self.points = win + draw * 0.5
+    @property
+    def points(self):
+        return self.win + self.draw * 0.5
 class Chesser:
     def __init__(self, name, org, id, records, skills):
         self.name = name
@@ -83,17 +85,13 @@ def simulate(player1, player2, variation):
 def updateresult(outcome, player1, player2):
     if outcome == player1:
         player1.records.win += 1
-        player1.records.points += 1
         player2.records.loss += 1
     elif outcome == player2:
         player2.records.win += 1
-        player2.records.points += 1
         player1.records.loss += 1
     elif "Draw" in outcome:
         player1.records.draw += 1
-        player1.records.points += 0.5
         player2.records.draw += 1
-        player2.records.points += 0.5
 def displayresult(players, category):
     players.sort(key=lambda p: (p.records.points, p.records.win), reverse=True)
     print(f"\n{category.name} results:")
@@ -116,7 +114,7 @@ def choosevariation():
         return Freestyle
     else:
         print("Invalid input")
-        return None  # Return None for invalid input
+        return None
 
 #Categories
 Classical = Category("Classical", Skills(0.15, 0.25, 0.1, 0.2, 0.2, 0.1), draw=0.2)
