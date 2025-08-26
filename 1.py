@@ -32,7 +32,7 @@ class Category:
 
 #Functions
 def greet():
-    print("Welcome to the Chess Tournament Simulator!")
+    print("WAS? Welcome to the Chess Tournament Simulator!")
     print("This program will simulate a chess tournament between a set of players.")
     print("The tournament will be played in a round-robin format, with each player playing each other player twice.")
     print("The tournament will be played in a single variation, which can be chosen by the user.")
