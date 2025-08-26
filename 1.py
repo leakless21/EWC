@@ -31,6 +31,11 @@ class Category:
         self.draw = draw
 
 #Functions
+def greet():
+    print("Welcome to the Chess Tournament Simulator!")
+    print("This program will simulate a chess tournament between a set of players.")
+    print("The tournament will be played in a round-robin format, with each player playing each other player twice.")
+    print("The tournament will be played in a single variation, which can be chosen by the user.")
 def roundrobin(players): #Generate match-up for each round, each pair play each other twice
     pairings = []
     for i in range(len(players) - 1):
@@ -123,6 +128,7 @@ Blitz = Category("Blitz", weights=Skills(0.3, 0.15, 0.25, 0.15, 0.05, 0.1), draw
 Freestyle = Category("Freestyle", weights=Skills(0.25, 0.25, 0.15, 0.1, 0.15, 0.1), draw=0.15)
 
 #Main loop
+greet()
 players = loadplayers("Players.csv")
 pairings = roundrobin(players)
 variation = choosevariation()
